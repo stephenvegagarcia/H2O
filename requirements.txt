@@ -1,0 +1,3 @@
+# H2O Satellite Water Shield System
+# Python requirements file
+# No external dependencies required - uses only Python standard library
