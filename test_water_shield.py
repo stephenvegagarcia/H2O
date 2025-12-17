@@ -3,7 +3,6 @@ Unit tests for the Satellite Water Shield System
 """
 
 import unittest
-import math
 from water_shield import (
     SatelliteWaterShield,
     WaterShieldConfig,
