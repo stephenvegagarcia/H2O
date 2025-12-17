@@ -1,5 +1,9 @@
 # H2O: Satellite Water Shield System
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 A comprehensive Python implementation of a satellite water shield system that leverages orbital hot/cold cycles for dual-purpose radiation protection and power generation.
 
 ## Overview
@@ -38,14 +42,53 @@ The H2O system uses water as a multi-functional resource in space:
 
 ## Installation
 
-No external dependencies required! The system uses only Python standard library.
+### Core Library (No dependencies)
 
 ```bash
 git clone https://github.com/stephenvegagarcia/H2O.git
 cd H2O
 ```
 
+### Web Dashboard (Optional)
+
+For the interactive web dashboard, install Flask:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Quick Start
+
+### Command Line Interface
+
+```python
+from water_shield import SatelliteWaterShield
+
+# Create a default system (ISS-like orbit)
+system = SatelliteWaterShield()
+
+# Print comprehensive status report
+system.print_system_report(exposure_days=30)
+```
+
+### Web Dashboard
+
+Launch the interactive web interface:
+
+```bash
+python app.py
+```
+
+Then open your browser to `http://localhost:5000` to see:
+- 📊 Real-time system metrics
+- 🛰️ Orbital parameters visualization
+- ☢️ Radiation protection stats
+- ⚡ Power generation monitoring
+- 🌡️ Thermal cycling data
+
+<p align="center">
+  <img src="https://via.placeholder.com/800x400?text=Web+Dashboard+Screenshot" alt="Web Dashboard" />
+</p>
 
 ### Basic Usage
 
@@ -240,14 +283,29 @@ Temperature gradients drive power generation:
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit issues or pull requests.
+We welcome contributions! 🚀 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
-Areas for enhancement:
-- Additional orbital mechanics
-- Advanced thermal modeling
-- Real-world mission scenarios
-- Visualization and plotting
-- Integration with satellite simulators
+### Quick Contribution Guide
+
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Make your changes** following our coding standards
+4. **Add tests** for new functionality
+5. **Commit your changes** (`git commit -m 'feat: add amazing feature'`)
+6. **Push to the branch** (`git push origin feature/amazing-feature`)
+7. **Open a Pull Request**
+
+### Areas for Enhancement
+
+- 🔬 Additional radiation models (SPE, Van Allen belts)
+- 🌡️ Advanced thermal modeling
+- 📊 Data visualization and plotting
+- 🛰️ Real-world mission scenarios
+- 🧪 Integration with satellite simulators
+- 📱 Mobile-responsive web dashboard
+- 🌍 Multi-language support
+
+See our [open issues](https://github.com/stephenvegagarcia/H2O/issues) for more ideas!
 
 ## License
 
