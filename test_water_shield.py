@@ -106,7 +106,9 @@ class TestThermalCycleManager(unittest.TestCase):
     """Test thermal cycle management."""
     
     # Test constants
-    MAX_REASONABLE_HEAT_RATE_W = 50000  # Maximum reasonable heat rate (50 kW)
+    # Maximum heat rate based on solar constant (1361 W/m²) × max reasonable surface area (30 m²)
+    # × max absorption coefficient (0.8) ≈ 32.7 kW, rounded up to 50 kW for safety margin
+    MAX_REASONABLE_HEAT_RATE_W = 50000
     
     def setUp(self):
         """Set up test fixtures."""

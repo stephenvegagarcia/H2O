@@ -130,33 +130,45 @@ class ThermalCycleManager:
             'total_capacity_kwh': total_capacity_j / 3.6e6
         }
     
-    def calculate_heat_absorption_rate(self, solar_constant_w_m2: float = 1361.0) -> float:
+    def calculate_heat_absorption_rate(self, solar_constant_w_m2: float = 1361.0,
+                                        absorption_coefficient: float = 0.7) -> float:
         """
         Calculate heat absorption rate during sunlight phase.
         
         Args:
-            solar_constant_w_m2: Solar irradiance (W/m²)
+            solar_constant_w_m2: Solar irradiance (W/m²) - default is 1361 W/m² at Earth orbit
+            absorption_coefficient: Solar absorptivity (0-1) - water surfaces typically 0.6-0.8
             
         Returns:
             Heat absorption rate in watts
+            
+        Note:
+            Absorption coefficient varies with surface conditions:
+            - Calm water: ~0.96
+            - Ice/snow: ~0.1-0.5
+            - Water droplets/ice mix: ~0.6-0.8 (used as conservative estimate)
         """
-        # Assuming absorption coefficient of ~0.7 for water
-        absorption_coefficient = 0.7
         heat_rate_w = solar_constant_w_m2 * self.config.surface_area_m2 * absorption_coefficient
         return heat_rate_w
     
-    def calculate_heat_rejection_rate(self, space_temp_k: float = 3.0) -> float:
+    def calculate_heat_rejection_rate(self, space_temp_k: float = 3.0,
+                                        emissivity: float = 0.95) -> float:
         """
         Calculate heat rejection rate during eclipse phase.
         
         Args:
-            space_temp_k: Background temperature of space (Kelvin)
+            space_temp_k: Background temperature of space (Kelvin) - cosmic background is ~2.7K
+            emissivity: Thermal emissivity (0-1) - ice/water surfaces typically 0.95-0.98
             
         Returns:
             Heat rejection rate in watts
+            
+        Note:
+            Uses Stefan-Boltzmann law: P = ε·σ·A·(T⁴ - T_space⁴)
+            Emissivity values from Incropera & DeWitt, "Fundamentals of Heat Transfer":
+            - Water: 0.95-0.96
+            - Ice: 0.96-0.98
         """
-        # Stefan-Boltzmann radiation: P = ε·σ·A·T^4
-        emissivity = 0.95  # For water/ice
         stefan_boltzmann = 5.67e-8  # W/(m²·K⁴)
         avg_temp_k = (self.config.hot_temp_celsius + 273.15 + 
                       self.config.cold_temp_celsius + 273.15) / 2
@@ -171,7 +183,10 @@ class PowerGenerator:
     """Manages power generation from thermal cycles."""
     
     # Peak power factor for phase change periods
-    PEAK_POWER_MULTIPLIER = 2.0  # Peak is approximately 2x average during phase change
+    # During phase transitions (ice melting/water freezing), energy release is concentrated
+    # at the melting/freezing point, creating ~2x power peaks vs. average sensible heating
+    # Based on latent heat release rates during phase change
+    PEAK_POWER_MULTIPLIER = 2.0
     
     def __init__(self, thermal_manager: ThermalCycleManager, efficiency: float = 0.15):
         self.thermal_manager = thermal_manager
