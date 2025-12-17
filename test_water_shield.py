@@ -105,6 +105,9 @@ class TestRadiationShield(unittest.TestCase):
 class TestThermalCycleManager(unittest.TestCase):
     """Test thermal cycle management."""
     
+    # Test constants
+    MAX_REASONABLE_HEAT_RATE_W = 50000  # Maximum reasonable heat rate (50 kW)
+    
     def setUp(self):
         """Set up test fixtures."""
         self.config = WaterShieldConfig()
@@ -133,7 +136,7 @@ class TestThermalCycleManager(unittest.TestCase):
         rate = self.manager.calculate_heat_absorption_rate()
         self.assertGreater(rate, 0)
         # Should be reasonable for the given surface area
-        self.assertLess(rate, 50000)  # Less than 50 kW
+        self.assertLess(rate, self.MAX_REASONABLE_HEAT_RATE_W)
     
     def test_heat_rejection_rate(self):
         """Test heat rejection rate calculation."""
@@ -235,6 +238,12 @@ class TestSatelliteWaterShield(unittest.TestCase):
 class TestPhysicalConstraints(unittest.TestCase):
     """Test physical constraints and edge cases."""
     
+    # Physical constraint constants
+    MIN_THERMAL_CAPACITY_MJ = 300  # Minimum expected thermal capacity
+    MAX_THERMAL_CAPACITY_MJ = 1000  # Maximum expected thermal capacity
+    MIN_POWER_W = 1  # Minimum power output
+    MAX_POWER_W = 100000  # Maximum power output (100 kW)
+    
     def test_energy_conservation(self):
         """Test that energy values are physically reasonable."""
         config = WaterShieldConfig(water_mass_kg=1000.0)
@@ -246,8 +255,8 @@ class TestPhysicalConstraints(unittest.TestCase):
         # Water's specific heat is 4.186 kJ/(kg·K)
         # Latent heat is 334 kJ/kg
         # Values should be in expected ranges
-        self.assertGreater(capacity['total_capacity_mj'], 300)  # At least 300 MJ
-        self.assertLess(capacity['total_capacity_mj'], 1000)  # Less than 1 GJ
+        self.assertGreater(capacity['total_capacity_mj'], self.MIN_THERMAL_CAPACITY_MJ)
+        self.assertLess(capacity['total_capacity_mj'], self.MAX_THERMAL_CAPACITY_MJ)
     
     def test_power_limits(self):
         """Test that power generation is within physical limits."""
@@ -256,8 +265,8 @@ class TestPhysicalConstraints(unittest.TestCase):
         
         # Average power should be reasonable (not gigawatts!)
         avg_power = status['power_generation']['avg_power_w']
-        self.assertGreater(avg_power, 1)  # At least 1 W
-        self.assertLess(avg_power, 100000)  # Less than 100 kW
+        self.assertGreater(avg_power, self.MIN_POWER_W)
+        self.assertLess(avg_power, self.MAX_POWER_W)
 
 
 def run_tests():

@@ -55,7 +55,6 @@ class RadiationShield:
     
     # Radiation constants
     GCR_FLUX_MSV_DAY = 0.5  # Galactic Cosmic Rays flux (mSv/day)
-    SPE_FLUX_MSV_EVENT = 10.0  # Solar Particle Event flux (mSv/event)
     
     # Water shielding effectiveness (% reduction per cm)
     WATER_ATTENUATION_RATE = 0.15  # 15% reduction per cm
@@ -171,6 +170,9 @@ class ThermalCycleManager:
 class PowerGenerator:
     """Manages power generation from thermal cycles."""
     
+    # Peak power factor for phase change periods
+    PEAK_POWER_MULTIPLIER = 2.0  # Peak is approximately 2x average during phase change
+    
     def __init__(self, thermal_manager: ThermalCycleManager, efficiency: float = 0.15):
         self.thermal_manager = thermal_manager
         self.efficiency = efficiency  # Carnot efficiency for thermoelectric conversion
@@ -202,7 +204,7 @@ class PowerGenerator:
         return {
             'energy_per_orbit_kwh': electrical_energy_kwh,
             'avg_power_w': avg_power_w,
-            'peak_power_w': avg_power_w * 2,  # Approximate peak during phase change
+            'peak_power_w': avg_power_w * self.PEAK_POWER_MULTIPLIER,
             'daily_energy_kwh': daily_energy_kwh,
             'conversion_efficiency': self.efficiency
         }
