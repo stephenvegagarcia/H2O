@@ -13,7 +13,9 @@ If you want a friendly domain to land on this project, you can forward traffic t
        server_name h2o.example.com;
        location / {
          proxy_pass https://github.com/stephenvegagarcia/H2O;
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
        }
      }
      ```
-3. Verify the forwarding with `curl -I https://h2o.example.com` to confirm requests reach the target.
+3. Verify the forwarding with `curl -I https://h2o.example.com` and check for the expected status (e.g., `200` for a served page or `301/302` if you are intentionally redirecting).
