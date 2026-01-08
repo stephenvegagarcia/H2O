@@ -167,12 +167,12 @@ Tests cover:
 - Physical constraints validation
 - Integration testing
 
-## Routing traffic through a custom domain (qc1.dev)
+## Routing traffic through a custom domain
 
-If you want a friendly domain to land on this project, you can forward traffic through the qc1.dev edge and let it redirect to your deployed H2O instance or repository page.
+To serve the dashboard behind a friendly domain, configure your DNS and reverse proxy:
 
-1. Add a DNS **CNAME** record for your domain (e.g., `h2o.example.com`) that points to `qc1.dev`.
-2. On your reverse proxy at qc1.dev, create a route that forwards incoming requests for `h2o.example.com` to the target you want to serve (for example, your deployed H2O service or this repository URL).
+1. Add a DNS **CNAME** record for your domain (e.g., `h2o.example.com`) that points to your proxy/edge host.
+2. On your reverse proxy, forward incoming requests for `h2o.example.com` to the target you want to serve (for example, your deployed H2O service or this repository URL).
    - Example Nginx snippet:
      ```
      server {
