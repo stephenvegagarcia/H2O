@@ -12,9 +12,11 @@ If you want a friendly domain to land on this project, you can forward traffic t
      server {
        server_name h2o.example.com;
        location / {
-         proxy_pass https://github.com/stephenvegagarcia/H2O;
+         proxy_pass https://your-h2o-target.example.com; # e.g., https://github.com/stephenvegagarcia/H2O
          proxy_set_header Host $host;
          proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Proto $scheme;
        }
      }
      ```
