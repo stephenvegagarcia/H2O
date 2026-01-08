@@ -1,0 +1,5 @@
+# H2O Satellite Water Shield System
+# Python requirements file
+
+# Web application framework
+Flask==3.0.0
