@@ -322,7 +322,7 @@
     </div>
     
     <script>
-        const WATTS_PER_KILOWATT = 1000;
+        const WATTS_PER_KW = 1000;
 
         function updateData() {
             const days = document.getElementById('exposureDays').value;
@@ -375,11 +375,11 @@
                     
                     // Power Generation
                     document.getElementById('avg-power').textContent = 
-                        (data.power_generation.avg_power_w / WATTS_PER_KILOWATT).toFixed(2) + ' kW';
+                        (data.power_generation.avg_power_w / WATTS_PER_KW).toFixed(2) + ' kW';
                     document.getElementById('energy-orbit').textContent = 
                         data.power_generation.energy_per_orbit_kwh.toFixed(3) + ' kWh';
                     document.getElementById('peak-power').textContent = 
-                        (data.power_generation.peak_power_w / WATTS_PER_KILOWATT).toFixed(2) + ' kW';
+                        (data.power_generation.peak_power_w / WATTS_PER_KW).toFixed(2) + ' kW';
                     document.getElementById('daily-energy').textContent = 
                         data.power_generation.daily_energy_kwh.toFixed(2) + ' kWh';
                     document.getElementById('efficiency').textContent = 

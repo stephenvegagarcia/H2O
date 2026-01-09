@@ -15,6 +15,12 @@ import math
 from typing import Dict, Tuple
 from dataclasses import dataclass
 
+# Physical constants and conversions
+JOULES_PER_MEGAJOULE = 1e6
+JOULES_PER_KWH = 3.6e6
+MINUTES_PER_DAY = 1440
+STEFAN_BOLTZMANN = 5.67e-8  # W/(m²·K⁴)
+
 
 @dataclass
 class OrbitalParameters:
@@ -124,10 +130,10 @@ class ThermalCycleManager:
         total_capacity_j = sensible_heat_j + latent_heat_j
         
         return {
-            'sensible_heat_mj': sensible_heat_j / 1e6,
-            'latent_heat_mj': latent_heat_j / 1e6,
-            'total_capacity_mj': total_capacity_j / 1e6,
-            'total_capacity_kwh': total_capacity_j / 3.6e6
+            'sensible_heat_mj': sensible_heat_j / JOULES_PER_MEGAJOULE,
+            'latent_heat_mj': latent_heat_j / JOULES_PER_MEGAJOULE,
+            'total_capacity_mj': total_capacity_j / JOULES_PER_MEGAJOULE,
+            'total_capacity_kwh': total_capacity_j / JOULES_PER_KWH
         }
     
     def calculate_heat_absorption_rate(self, solar_constant_w_m2: float = 1361.0,
@@ -169,11 +175,10 @@ class ThermalCycleManager:
             - Water: 0.95-0.96
             - Ice: 0.96-0.98
         """
-        stefan_boltzmann = 5.67e-8  # W/(m²·K⁴)
         avg_temp_k = (self.config.hot_temp_celsius + 273.15 + 
                       self.config.cold_temp_celsius + 273.15) / 2
         
-        heat_rate_w = (emissivity * stefan_boltzmann * 
+        heat_rate_w = (emissivity * STEFAN_BOLTZMANN * 
                       self.config.surface_area_m2 * 
                       (avg_temp_k**4 - space_temp_k**4))
         return heat_rate_w
@@ -203,17 +208,17 @@ class PowerGenerator:
         orbital_period_sec = self.thermal_manager.orbital_params.orbital_period_min * 60
         
         # Thermal energy cycled per orbit
-        thermal_energy_j = thermal_capacity['total_capacity_mj'] * 1e6
+        thermal_energy_j = thermal_capacity['total_capacity_mj'] * JOULES_PER_MEGAJOULE
         
         # Electrical energy generated (accounting for efficiency)
         electrical_energy_j = thermal_energy_j * self.efficiency
-        electrical_energy_kwh = electrical_energy_j / 3.6e6
+        electrical_energy_kwh = electrical_energy_j / JOULES_PER_KWH
         
         # Average power output
         avg_power_w = electrical_energy_j / orbital_period_sec
         
         # Daily energy production
-        orbits_per_day = 1440 / self.thermal_manager.orbital_params.orbital_period_min
+        orbits_per_day = MINUTES_PER_DAY / self.thermal_manager.orbital_params.orbital_period_min
         daily_energy_kwh = electrical_energy_kwh * orbits_per_day
         
         return {
