@@ -108,7 +108,7 @@ class TestThermalCycleManager(unittest.TestCase):
     # Test constants
     # Maximum heat rate based on solar constant (1361 W/m²) × max reasonable surface area (30 m²)
     # × max absorption coefficient (0.8) ≈ 32.7 kW, rounded up to 50 kW for safety margin
-    MAX_REASONABLE_HEAT_RATE_W = 50000
+    MAX_EXPECTED_SOLAR_HEAT_RATE_W = 50000
     
     def setUp(self):
         """Set up test fixtures."""
@@ -138,7 +138,7 @@ class TestThermalCycleManager(unittest.TestCase):
         rate = self.manager.calculate_heat_absorption_rate()
         self.assertGreater(rate, 0)
         # Should be reasonable for the given surface area
-        self.assertLess(rate, self.MAX_REASONABLE_HEAT_RATE_W)
+        self.assertLess(rate, self.MAX_EXPECTED_SOLAR_HEAT_RATE_W)
     
     def test_heat_rejection_rate(self):
         """Test heat rejection rate calculation."""
@@ -240,11 +240,11 @@ class TestSatelliteWaterShield(unittest.TestCase):
 class TestPhysicalConstraints(unittest.TestCase):
     """Test physical constraints and edge cases."""
     
-    # Physical constraint constants
-    MIN_THERMAL_CAPACITY_MJ = 300  # Minimum expected thermal capacity
-    MAX_THERMAL_CAPACITY_MJ = 1000  # Maximum expected thermal capacity
-    MIN_POWER_W = 1  # Minimum power output
-    MAX_POWER_W = 100000  # Maximum power output (100 kW)
+    # Physical constraint constants derived from default config (~627 MJ, ~17 kW average)
+    MIN_THERMAL_CAPACITY_MJ = 300   # Lower bound sanity check (~50% of default capacity)
+    MAX_THERMAL_CAPACITY_MJ = 1000  # Upper bound sanity check (~1.5x default capacity)
+    MIN_POWER_W = 1                 # Must be positive; anything below implies zero output
+    MAX_POWER_W = 100000            # Cap at 100 kW to guard against unrealistic gigawatt outputs
     
     def test_energy_conservation(self):
         """Test that energy values are physically reasonable."""

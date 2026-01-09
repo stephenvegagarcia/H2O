@@ -186,7 +186,7 @@ class PowerGenerator:
     # During phase transitions (ice melting/water freezing), energy release is concentrated
     # at the melting/freezing point, creating ~2x power peaks vs. average sensible heating
     # Based on latent heat release rates during phase change
-    PEAK_POWER_MULTIPLIER = 2.0  # Empirical factor to capture peak power during phase transitions
+    PEAK_POWER_MULTIPLIER = 2.0  # Approx. 2x peak vs. average power during latent heat release (melting/freezing)
     
     def __init__(self, thermal_manager: ThermalCycleManager, efficiency: float = 0.15):
         self.thermal_manager = thermal_manager
