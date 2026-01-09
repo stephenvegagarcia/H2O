@@ -167,27 +167,6 @@ Tests cover:
 - Physical constraints validation
 - Integration testing
 
-## Routing traffic through a custom domain
-
-To serve the dashboard behind a friendly domain, configure your DNS and reverse proxy:
-
-1. Add a DNS **CNAME** record for your domain (e.g., `h2o.example.com`) that points to your proxy/edge host.
-2. On your reverse proxy, forward incoming requests for `h2o.example.com` to the target you want to serve (for example, your deployed H2O service or this repository URL).
-   - Example Nginx snippet:
-     ```
-     server {
-       server_name h2o.example.com;
-       location / {
-         proxy_pass https://your-h2o-target.example.com; # e.g., https://github.com/stephenvegagarcia/H2O
-         proxy_set_header Host $host;
-         proxy_set_header X-Real-IP $remote_addr;
-         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-         proxy_set_header X-Forwarded-Proto $scheme;
-       }
-     }
-     ```
-3. Verify the forwarding with `curl -I https://h2o.example.com` and check for the expected status (e.g., `200` for a served page or `301/302` if you are intentionally redirecting).
-
 ## System Components
 
 ### 1. OrbitalParameters
