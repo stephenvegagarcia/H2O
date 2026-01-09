@@ -212,6 +212,7 @@ class TestSatelliteWaterShield(unittest.TestCase):
         status = system.get_system_status(exposure_days=30)
         
         # Check all major sections are present
+        self.assertIn('domain_name', status)
         self.assertIn('orbital_parameters', status)
         self.assertIn('water_shield', status)
         self.assertIn('radiation_protection', status)
@@ -220,10 +221,18 @@ class TestSatelliteWaterShield(unittest.TestCase):
         self.assertIn('power_generation', status)
         
         # Verify some key values
+        self.assertEqual(status['domain_name'], "qc1.dev")
         self.assertEqual(status['orbital_parameters']['altitude_km'], 400.0)
         self.assertEqual(status['water_shield']['water_mass_kg'], 1000.0)
         self.assertGreater(status['radiation_protection']['reduction_percent'], 0)
         self.assertGreater(status['power_generation']['avg_power_w'], 0)
+    
+    def test_custom_domain_name(self):
+        """Test that a custom domain name is preserved."""
+        custom_domain = "custom.example"
+        system = SatelliteWaterShield(domain_name=custom_domain)
+        status = system.get_system_status(exposure_days=7)
+        self.assertEqual(status['domain_name'], custom_domain)
     
     def test_print_system_report(self):
         """Test that system report prints without errors."""

@@ -236,7 +236,8 @@ class SatelliteWaterShield:
     def __init__(self, 
                  water_config: WaterShieldConfig = None,
                  orbital_params: OrbitalParameters = None,
-                 power_efficiency: float = 0.15):
+                 power_efficiency: float = 0.15,
+                 domain_name: str = "qc1.dev"):
         """
         Initialize the satellite water shield system.
         
@@ -244,9 +245,11 @@ class SatelliteWaterShield:
             water_config: Configuration for water shield
             orbital_params: Orbital parameters
             power_efficiency: Thermoelectric conversion efficiency
+            domain_name: Deployment domain identifier
         """
         self.water_config = water_config or WaterShieldConfig()
         self.orbital_params = orbital_params or OrbitalParameters()
+        self.domain_name = domain_name
         
         # Initialize subsystems
         self.radiation_shield = RadiationShield(self.water_config)
@@ -271,6 +274,7 @@ class SatelliteWaterShield:
         heat_rejection = self.thermal_manager.calculate_heat_rejection_rate()
         
         return {
+            'domain_name': self.domain_name,
             'orbital_parameters': {
                 'altitude_km': self.orbital_params.altitude_km,
                 'orbital_period_min': self.orbital_params.orbital_period_min,
@@ -303,6 +307,7 @@ class SatelliteWaterShield:
         print("=" * 70)
         print("SATELLITE WATER SHIELD SYSTEM - STATUS REPORT")
         print("=" * 70)
+        print(f"Deployment Domain: {self.domain_name}")
         
         print("\n[ORBITAL PARAMETERS]")
         print(f"  Altitude: {status['orbital_parameters']['altitude_km']:.1f} km")
