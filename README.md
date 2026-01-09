@@ -45,7 +45,7 @@ The H2O system uses water as a multi-functional resource in space:
 ### Core Library (No dependencies)
 
 ```bash
-git clone https://github.com/stephenvegagarcia/H2O.git
+git clone https://github.com/<your-username>/H2O.git
 cd H2O
 ```
 
